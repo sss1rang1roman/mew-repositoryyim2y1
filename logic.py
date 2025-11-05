@@ -8,13 +8,12 @@ class Pokemon:
         self.pokemon_trainer = pokemon_trainer   
         self.pokemon_number = randint(1, 1000)
         
-       
         self.name = self.get_name()
         self.img = self.get_img()
         self.type = self.get_type()
-        self.hp = self.get_hp()
-        self.attack = self.get_attack()
-        self.defense = self.get_defense()
+        
+        self.hp = randint(50, 100)  
+        self.power = randint(10, 30)  
         
         Pokemon.pokemons[pokemon_trainer] = self
 
@@ -45,50 +44,52 @@ class Pokemon:
         else:
             return "electric"
 
-    def get_hp(self):
-        url = f'https://pokeapi.co/api/v2/pokemon/{self.pokemon_number}'
-        response = requests.get(url)
-        if response.status_code == 200:
-            data = response.json()
-            for stat in data['stats']:
-                if stat['stat']['name'] == 'hp':
-                    return stat['base_stat']
-        return 50
-
-    def get_attack(self):
-        """атаку покемона"""
-        url = f'https://pokeapi.co/api/v2/pokemon/{self.pokemon_number}'
-        response = requests.get(url)
-        if response.status_code == 200:
-            data = response.json()
-            for stat in data['stats']:
-                if stat['stat']['name'] == 'attack':
-                    return stat['base_stat']
-        return 50
-
-    def get_defense(self):
-        """ защиту покемона"""
-        url = f'https://pokeapi.co/api/v2/pokemon/{self.pokemon_number}'
-        response = requests.get(url)
-        if response.status_code == 200:
-            data = response.json()
-            for stat in data['stats']:
-                if stat['stat']['name'] == 'defense':
-                    return stat['base_stat']
-        return 50
-
-
     def info(self):
-        return f"Имя  покемона: {self.name}"
+        return f"Имя твоего покемона: {self.name}\n❤️ Здоровье: {self.hp}\n💪 Сила: {self.power}"
+
+    def attack(self, enemy):
+        if isinstance(enemy, Wizard):
+            chance = randint(1, 5)
+            if chance == 1:
+                return "Покемон-волшебник применил щит в сражении"
+        
+
+        if enemy.hp > self.power:
+            enemy.hp -= self.power
+            return f"Сражение @{self.pokemon_trainer} с @{enemy.pokemon_trainer}"
+        else:
+            enemy.hp = 0
+            return f"Победа @{self.pokemon_trainer} над @{enemy.pokemon_trainer}! "
 
     def show_img(self):
         return self.img
 
-    def get_full_info(self):
-        return f"""
-     {self.name.capitalize()}
- Тип: {self.type}
- HP: {self.hp}
- Атака: {self.attack}
- Защита: {self.defense}
-        """
+class Wizard(Pokemon):
+    def __init__(self, pokemon_trainer):
+        super().__init__(pokemon_trainer)
+        self.hp = randint(80, 120)
+        self.power = randint(5, 20)
+
+    def info(self):
+        base_info = super().info()
+        return f"У тебя покемон-волшебник\n{base_info}"
+
+    def attack(self, enemy):
+        return super().attack(enemy)
+
+class Fighter(Pokemon):
+    def __init__(self, pokemon_trainer):
+        super().__init__(pokemon_trainer)
+        self.hp = randint(40, 80)
+        self.power = randint(25, 40)
+
+    def info(self):
+        base_info = super().info()
+        return f"У тебя покемон-боец\n{base_info}"
+
+    def attack(self, enemy):
+        super_power = randint(5, 15)
+        self.power += super_power
+        result = super().attack(enemy)
+        self.power -= super_power
+        return result + f"\nБоец применил супер-атаку силой:{super_power} "
