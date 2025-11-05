@@ -53,7 +53,6 @@ class Pokemon:
             if chance == 1:
                 return "Покемон-волшебник применил щит в сражении"
         
-
         if enemy.hp > self.power:
             enemy.hp -= self.power
             return f"Сражение @{self.pokemon_trainer} с @{enemy.pokemon_trainer}"
@@ -93,3 +92,21 @@ class Fighter(Pokemon):
         result = super().attack(enemy)
         self.power -= super_power
         return result + f"\nБоец применил супер-атаку силой:{super_power} "
+
+if __name__ == '__main__':
+    wizard = Wizard("username1")
+    fighter = Fighter("username2")
+
+    print("=== ИНФОРМАЦИЯ О ПОКЕМОНАХ ===")
+    print(wizard.info())
+    print()
+    print(fighter.info())
+    print()
+    
+    print("=== БИТВА ===")
+    print(fighter.attack(wizard))
+    print()
+    
+    print("=== СОСТОЯНИЕ ПОСЛЕ БИТВЫ ===")
+    print(f"HP волшебника: {wizard.hp}")
+    print(f"Сила бойца: {fighter.power}")
