@@ -37,7 +37,6 @@ class Pokemon:
             return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png"
 
     def get_type(self):
-        """ тип покемона"""
         url = f'https://pokeapi.co/api/v2/pokemon/{self.pokemon_number}'
         response = requests.get(url)
         if response.status_code == 200:
@@ -47,7 +46,6 @@ class Pokemon:
             return "electric"
 
     def get_hp(self):
-        """ HP покемона"""
         url = f'https://pokeapi.co/api/v2/pokemon/{self.pokemon_number}'
         response = requests.get(url)
         if response.status_code == 200:
@@ -87,11 +85,10 @@ class Pokemon:
         return self.img
 
     def get_full_info(self):
-        """ информация о покемоне"""
         return f"""
-🐾 {self.name.capitalize()}
-⚡ Тип: {self.type}
-❤️ HP: {self.hp}
-⚔️ Атака: {self.attack}
-🛡️ Защита: {self.defense}
+     {self.name.capitalize()}
+ Тип: {self.type}
+ HP: {self.hp}
+ Атака: {self.attack}
+ Защита: {self.defense}
         """
