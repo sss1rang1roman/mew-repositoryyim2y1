@@ -93,20 +93,13 @@ class Fighter(Pokemon):
         self.power -= super_power
         return result + f"\nБоец применил супер-атаку силой:{super_power} "
 
+
 if __name__ == '__main__':
     wizard = Wizard("username1")
     fighter = Fighter("username2")
 
-    print("=== ИНФОРМАЦИЯ О ПОКЕМОНАХ ===")
     print(wizard.info())
     print()
     print(fighter.info())
     print()
-    
-    print("=== БИТВА ===")
     print(fighter.attack(wizard))
-    print()
-    
-    print("=== СОСТОЯНИЕ ПОСЛЕ БИТВЫ ===")
-    print(f"HP волшебника: {wizard.hp}")
-    print(f"Сила бойца: {fighter.power}")
