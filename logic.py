@@ -1,5 +1,6 @@
 from random import randint
 import requests
+from datetime import datetime, timedelta
 
 class Pokemon:
     pokemons = {}
@@ -17,6 +18,20 @@ class Pokemon:
         
         Pokemon.pokemons[pokemon_trainer] = self
 
+        self.last_feed_time = datetime.now()  
+    
+    def feed(self, feed_interval=20, hp_increase=10):
+        current_time = datetime.now()  
+        delta_time = timedelta(seconds=feed_interval)  
+        
+        if current_time - self.last_feed_time > delta_time:
+            self.hp += hp_increase
+            self.last_feed_time = current_time
+            return f"Здоровье покемона увеличено. Текущее здоровье: {self.hp}"
+        else:
+            next_feed_time = self.last_feed_time + delta_time
+            return f"Следующее время кормления покемона: {next_feed_time.strftime('%Y-%m-%d %H:%M:%S')}"
+        
     def get_name(self):
         url = f'https://pokeapi.co/api/v2/pokemon/{self.pokemon_number}'
         response = requests.get(url)
@@ -69,6 +84,10 @@ class Wizard(Pokemon):
         self.hp = randint(80, 120)
         self.power = randint(5, 20)
 
+    def feed(self):
+       
+        return super().feed(feed_interval=20, hp_increase=20)
+
     def info(self):
         base_info = super().info()
         return f"У тебя покемон-волшебник\n{base_info}"
@@ -82,6 +101,10 @@ class Fighter(Pokemon):
         self.hp = randint(40, 80)
         self.power = randint(25, 40)
 
+    def feed(self):
+       
+        return super().feed(feed_interval=10, hp_increase=10)
+    
     def info(self):
         base_info = super().info()
         return f"У тебя покемон-боец\n{base_info}"
@@ -102,4 +125,12 @@ if __name__ == '__main__':
     print()
     print(fighter.info())
     print()
-    print(fighter.attack(wizard))
+    
+    result = fighter.attack(wizard)
+    print(result)
+    
+
+    if wizard.hp == 0:
+        print(f"\n🎉 ВЫИГРАЛ БОЕЦ! {fighter.name} победил {wizard.name}")
+    else:
+        print(f"\n🎯 {wizard.name} еще в строю! Осталось HP: {wizard.hp}")
